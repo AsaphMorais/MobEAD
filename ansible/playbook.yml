@@ -1,0 +1,28 @@
+---
+- name: Instalar IIS no Windows Server
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Instalar IIS
+      win_feature:
+        name: Web-Server
+        state: present
+        include_management_tools: yes
+
+    - name: Garantir que o IIS está rodando
+      win_service:
+        name: W3SVC
+        state: started
+        start_mode: auto
+
+    - name: Criar página de teste
+      win_copy:
+        content: |
+          <html>
+            <body>
+              <h1>IIS funcionando - Asaph Morais - Unyleya</h1>
+              <p>Deploy realizado via Ansible</p>
+            </body>
+          </html>
+        dest: C:\inetpub\wwwroot\index.html
